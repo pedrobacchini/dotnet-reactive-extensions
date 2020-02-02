@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Reactive.Linq" Version="4.3.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Product.cs" />
+      <Compile Remove="Entities\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Entities\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Entities\**" />
+    </ItemGroup>
+
+</Project>
