@@ -28,26 +28,51 @@ namespace EstudosLinq
                 new Product {Id = 11, Name = "Level", Price = 70.0, Category = c1}
             };
 
-            var r1 = products.Where(p => p.Category.Tier == 1 && p.Price < 900);
+//            var r1 = products.Where(p => p.Category.Tier == 1 && p.Price < 900);
+            var r1 =
+                from p in products
+                where p.Category.Tier == 1 && p.Price < 900
+                select p;
             Print("PRODUCTS TIER 1 AND PRICE < 900", r1);
 
-            var r2 = products.Where(p => p.Category.Id == 1).Select(p => p.Name);
+//            var r2 = products.Where(p => p.Category.Name == "Tools").Select(p => p.Name);
+            var r2 =
+                from p in products
+                where p.Category.Name == "Tools"
+                select p.Name;
             Print("NAMES OF PRODUCTS FROM TOOLS", r2);
 
-            var r3 = products.Where(p => p.Name.StartsWith("C"))
-                .Select(p => new {p.Name, p.Price, CategoryName = p.Category.Name});
+//            var r3 = products.Where(p => p.Name.StartsWith("C"))
+//                .Select(p => new {p.Name, p.Price, CategoryName = p.Category.Name});
+            var r3 =
+                from p in products
+                where p.Name.StartsWith("C")
+                select new
+                {
+                    p.Name,
+                    p.Price,
+                    CategoryName = p.Category.Name
+                };
             Print("PRODUCTS WITH NAME START C", r3);
 
-            var r4 = products.Where(p => p.Category.Tier == 1).OrderBy(p => p.Price).ThenBy(p => p.Name);
+//            var r4 = products.Where(p => p.Category.Tier == 1).OrderBy(p => p.Price).ThenBy(p => p.Name);
+            var r4 = from p in products
+                where p.Category.Tier == 1
+                orderby p.Price, p.Name
+                select p;
             Print("PRODUCTS TIER 1 ORDER BY PRICE", r4);
 
-            var r5 = r4.Skip(2).Take(4);
+
+//            var r5 = r4.Skip(2).Take(4);
+            var r5 = (from p in r4 select p).Skip(2).Take(4);
             Print("PRODUCTS TIER 1 ORDER BY PRICE SKIP 2 TAKE 4", r5);
 
-            var r6 = products.First();
+//            var r6 = products.FirstOrDefault();
+            var r6 = (from p in products select p).FirstOrDefault();
             Console.WriteLine("First or default test1: " + r6);
 
-            var r7 = products.FirstOrDefault(p => p.Price > 3000);
+//            var r7 = products.FirstOrDefault(p => p.Price > 3000);
+            var r7 = (from p in products select p).FirstOrDefault(p => p.Price > 3000);
             Console.WriteLine("First or default test2: " + r7);
             Console.WriteLine();
 
@@ -74,18 +99,20 @@ namespace EstudosLinq
 
             var r15 = products.Where(p => p.Category.Id == 1).Select(p => p.Price).Aggregate((p1, p2) => p1 + p2);
             Console.WriteLine("Category 1 Aggregate Sum prices: " + r15);
-            
+
             var r16 = products.Where(p => p.Category.Id == 5).Select(p => p.Price).Aggregate(0.0, (p1, p2) => p1 + p2);
             Console.WriteLine("Category 5 Aggregate Sum prices: " + r16);
             Console.WriteLine();
 
-            var r17 = products.GroupBy(p => p.Category);
+//            var r17 = products.GroupBy(p => p.Category);
+            var r17 = from p in products group p by p.Category;
             foreach (var group in r17)
             {
                 Console.WriteLine(group.Key.Name);
                 group.ToList().ForEach(Console.WriteLine);
                 Console.WriteLine();
             }
+
             Console.WriteLine();
         }
 
